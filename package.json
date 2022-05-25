@@ -49,7 +49,7 @@
     "pretest": "npm -s run build",
     "test": "npm -s run test:one",
     "test:one": "node test/simple.node.js",
-    "test:watch": "watchexec @.watchexec -w ./esm -w ./test -- node test/simple.node.js",
+    "test:watch": "watchexec @.watchexec -w ./esm -w ./test/esm -- node test/esm/simple.node.js",
     "prepublishOnly": "npm run clean && npm run test"
   }
 }

@@ -10,6 +10,9 @@ export default [
 
   {input: 'test/simple.web.js', plugins: test_plugins,
     output: {file: 'test/esm/simple.web.js', format: 'es', sourcemap: true}},
+
+  {input: 'test/simple.node.js', plugins: test_plugins,
+    output: {file: 'test/esm/simple.node.js', format: 'es', sourcemap: true}},
 ]
 
 function * add_out(src_name, opt={}) {

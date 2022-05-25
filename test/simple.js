@@ -1,5 +1,5 @@
 import {as_fuzzy_rx, fuzzy_score, fuzzy_sift_op} from 'fuzzy-rx'
-import sift from 'sift'
+import sift, {createEqualsOperation} from 'sift'
 import suite_main from './simple_root.js'
 
 
@@ -47,7 +47,7 @@ suite_main.test('match obj, almost exact', t => {
 
 suite_main.test('fuzzy sift', t => {
   let sift_opt = {operations: {
-    $fuzzy: fuzzy_sift_op(as_fuzzy_rx, sift),
+    $fuzzy: fuzzy_sift_op(as_fuzzy_rx, createEqualsOperation),
   }}
 
 
