@@ -1,0 +1,53 @@
+{
+  "name": "fuzzy-rx",
+  "version": "0.0.0",
+  "description": "Fuzzy searching implemented as escaped and compiled regexp",
+  "keywords": [
+    "fuzzy",
+    "search",
+    "regexp",
+    "text"
+  ],
+  "license": "MIT",
+  "author": "Shane Holloway <shane.holloway@ieee.org>",
+  "homepage": "https://github.com/shanewholloway/js-fuzzy-rx#readme",
+  "bugs": {
+    "url": "https://github.com/shanewholloway/js-fuzzy-rx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/shanewholloway/js-fuzzy-rx.git"
+  },
+  "files": [
+    "src/",
+    "cjs/",
+    "umd/",
+    "esm/"
+  ],
+  "type": "module",
+  "main": "./cjs/fuzzy-rx.js",
+  "browser": "./umd/fuzzy-rx.min.js",
+  "module": "./esm/fuzzy-rx.js",
+  "exports": {
+    "./esm/*": "./esm/*",
+    ".": "./esm/fuzzy-rx.js"
+  },
+  "workspaces": [],
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "bareuvu": "^0.0.6",
+    "rollup": "^2.74.1",
+    "rollup-plugin-terser": "^7.0.2"
+  },
+  "scripts": {
+    "clean": "rm -rf ./esm/* ./umd/* ./cjs/* ./test/esm/* ./test/cjs/*",
+    "prebuild": "test -d ./node_modules || npm ci",
+    "build": "rollup --config",
+    "watch": "rollup --config --watch",
+    "pretest": "npm -s run build",
+    "test": "npm -s run test:one",
+    "test:one": "node test/simple.node.js",
+    "test:watch": "watchexec @.watchexec -w ./esm -w ./test -- node test/simple.node.js",
+    "prepublishOnly": "npm run clean && npm run test"
+  }
+}
