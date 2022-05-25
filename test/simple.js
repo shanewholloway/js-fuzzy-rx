@@ -45,7 +45,7 @@ suite_main.test('match obj, almost exact', t => {
   t.assert.ok(1 > score && score > 0, score)
 })
 
-suite_main.test.only('fuzzy sift', t => {
+suite_main.test('fuzzy sift', t => {
   let sift_opt = {operations: {
     $fuzzy: fuzzy_sift_op(as_fuzzy_rx, sift),
   }}
