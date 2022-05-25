@@ -25,3 +25,10 @@ export function fuzzy_rx(flags='si', cache) {
 export const as_fuzzy_rx = /* #__PURE__ */ fuzzy_rx()
 export default as_fuzzy_rx
 
+
+export function fuzzy_sift_op(as_fuzzy_rx, create_sift_op) {
+  create_sift_op = create_sift_op.createEqualsOperation || create_sift_op
+  return (param_search, ownerQuery, options) =>
+    create_sift_op(as_fuzzy_rx(param_search), ownerQuery, options)
+}
+

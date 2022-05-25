@@ -1,6 +1,6 @@
 {
   "name": "fuzzy-rx",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Fuzzy searching implemented as escaped and compiled regexp",
   "keywords": [
     "fuzzy",
@@ -32,7 +32,9 @@
     "./esm/*": "./esm/*",
     ".": "./esm/fuzzy-rx.js"
   },
-  "workspaces": [],
+  "workspaces": [
+    "test"
+  ],
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",
     "bareuvu": "^0.0.6",

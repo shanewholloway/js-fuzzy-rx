@@ -1,4 +1,5 @@
-import {as_fuzzy_rx, fuzzy_score} from 'fuzzy-rx'
+import {as_fuzzy_rx, fuzzy_score, fuzzy_sift_op} from 'fuzzy-rx'
+import sift from 'sift'
 import suite_main from './simple_root.js'
 
 
@@ -42,6 +43,25 @@ suite_main.test('match obj, almost exact', t => {
 
   let score = fuzzy_score(m)
   t.assert.ok(1 > score && score > 0, score)
+})
+
+suite_main.test.only('fuzzy sift', t => {
+  let sift_opt = {operations: {
+    $fuzzy: fuzzy_sift_op(as_fuzzy_rx, sift),
+  }}
+
+
+  let data = [
+    { name: "Craig", state: "MN", tags: ["manager", "chef"] },
+    { name: "Tim", state: "MN", tags: ["engineer"] },
+    { name: "Joe", state: "CA", tags: ["engineer", "manager", "chef"] },
+    { name: "Frank", state: "IL", tags: ["manager"] },
+    { name: "Don", state: "WA", tags: ["chef"] },
+  ]
+  let query = {tags: {$fuzzy: 'mgr'}} // manager, the hard way
+
+  let result = data.filter(sift(query, sift_opt))
+  t.assert.equal(3, result.length)
 })
 
 
