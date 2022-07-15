@@ -3,6 +3,12 @@ import sift, {createEqualsOperation} from 'sift'
 import suite_main from './simple_root.js'
 
 
+suite_main.test('match test, escapesd', t => {
+  let rx = as_fuzzy_rx('hello!')
+  let txt = 'I am Happy \n to be here \n totally oblivious!'
+  t.assert.ok(true === rx.test(txt))
+})
+
 suite_main.test('match test, multi-line', t => {
   let rx = as_fuzzy_rx('hello')
   let txt = 'I am Happy \n to be here \n totally oblivious'
