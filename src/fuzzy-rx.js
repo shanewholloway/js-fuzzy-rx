@@ -39,7 +39,7 @@ export function fuzzy_rx(opt, cache) {
     return rx
   }
 
-  function _adv_search({prefix, suffix, depth, sep, q, flags}) {
+  function _adv_search({prefix, suffix, depth, sep, empty, q, flags}) {
     let rx = _rx_for(q, flags)
     return v => {
       v = v && v.substr ? v : false
@@ -49,15 +49,16 @@ export function fuzzy_rx(opt, cache) {
       if (v && suffix) {
         v = v.endsWith(suffix) && v.slice(0, -suffix.length)
       }
+      let _depth  = depth || 1
       if (v && sep) {
-        depth ||= 1
-        if (v.endsWith(sep)) depth += 1 // allow ending with a separator
+        if (v.endsWith(sep)) _depth += 1 // allow ending with a separator
 
         v = v.split(sep)
-        v = v.length > depth ? false : v.slice(0, depth).join(sep)
+        v = v.length > _depth ? false : v.slice(0, _depth).join(sep)
       }
 
-      return v && rx ? rx.test(v) : v !== false
+      return v && rx ? rx.test(v) :
+        empty ? v !== false : !! v
     }
   }
 }

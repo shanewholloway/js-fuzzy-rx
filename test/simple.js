@@ -135,7 +135,7 @@ suite_main.test('fuzzy sift with prefix and suffix', t => {
 })
 
 suite_main.test('fuzzy sift with prefix and suffix 2', t => {
-  let query = {tags: {$fuzzy: {prefix: 'dept_a/', suffix: 'engineer'}}}
+  let query = {tags: {$fuzzy: {prefix: 'dept_a/', suffix: 'engineer', empty: true}}}
 
   let result = adv_search_data.filter(sift(query, sift_opt))
   t.assert.equal(1, result.length)
