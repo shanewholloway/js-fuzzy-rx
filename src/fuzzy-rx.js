@@ -4,7 +4,10 @@ export const fuzzy_score = rx_match => !rx_match ? 0
   : Math.pow(.95, rx_match[0].length) // longer matches involve skipping more content
 
 
-export function fuzzy_rx(flags='si', cache) {
+export function fuzzy_rx(opt, cache) {
+  if (!opt || opt.substr)
+    opt = { flags: opt }
+
   let _rx_rx_escape = /([-[\]{}()*+!<=:?.\/\\^$|#\s,])/g
   let _xch = (p, idx) =>
       idx & 1 ? ['\\'+p] // escape char present at odd indexes
@@ -12,21 +15,50 @@ export function fuzzy_rx(flags='si', cache) {
 
 
   cache = cache || new Map()
-  return (sz, fl=flags) => {
-    if (!sz) return
+  return arg => {
+    if ('string' === typeof arg)
+      return _rx_for(arg, opt.flags) || (v => true) // simple fuzzy search as a string
 
-    let rx = cache.get(`${sz}\0${fl}`)
+    return _adv_search({...opt, ...arg})
+  }
+
+  function _rx_for(sz_fuzzy, rx_flags='si') {
+    if (! sz_fuzzy) return
+
+    let rx = cache.get(`${sz_fuzzy}\0${rx_flags}`)
     if (!rx) {
       // isolate and escape individual chars
-      rx = sz.split(_rx_rx_escape).flatMap(_xch)
+      rx = sz_fuzzy.split(_rx_rx_escape).flatMap(_xch)
 
       // join to exact match and in-order match
       rx = `(${rx.join('')})|(${rx.join(').*?(')})`
 
       // set rx into cache
-      cache.set(sz, rx = new RegExp(rx, fl))
+      cache.set(sz_fuzzy, rx = new RegExp(rx, rx_flags))
     }
     return rx
+  }
+
+  function _adv_search({prefix, suffix, depth, sep, q, flags}) {
+    let rx = _rx_for(q, flags)
+    return v => {
+      v = v && v.substr ? v : false
+      if (v && prefix) {
+        v = v.startsWith(prefix) && v.slice(prefix.length)
+      }
+      if (v && suffix) {
+        v = v.endsWith(suffix) && v.slice(0, -suffix.length)
+      }
+      if (v && sep) {
+        depth ||= 1
+        if (v.endsWith(sep)) depth += 1 // allow ending with a separator
+
+        v = v.split(sep)
+        v = v.length > depth ? false : v.slice(0, depth).join(sep)
+      }
+
+      return v && rx ? rx.test(v) : v !== false
+    }
   }
 }
 
